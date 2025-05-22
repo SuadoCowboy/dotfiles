@@ -368,6 +368,21 @@ require("lazy").setup({
 	--
 	-- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+	{
+		"nvim-telescope/telescope-file-browser.nvim",
+		dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+		config = function()
+			require("telescope").load_extension("file_browser")
+
+			vim.keymap.set("n", "<leader>sf", function()
+				require("telescope").extensions.file_browser.file_browser({
+					path = "%:p:h", -- start in current file's directory
+					select_buffer = true,
+				})
+			end, { desc = "[S]earch [F]iles" })
+		end,
+	},
+
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
@@ -438,7 +453,8 @@ require("lazy").setup({
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
 			vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-			vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+			-- Using telescope-file-browser instead
+			-- vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
 			vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -831,7 +847,7 @@ require("lazy").setup({
 
 				config = function()
 					require("blink-cmp").setup({
-						keymap = { preset = "cmdline" },
+						keymap = { preset = "super-tab" },
 					})
 				end,
 			},
